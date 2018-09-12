@@ -2,9 +2,7 @@ package getdata;
 import java.util.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.Reader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class wc {
 	@SuppressWarnings("resource")
@@ -29,15 +27,13 @@ public class wc {
 		else {
 			System.out.println("指令输入错误。");
 		}
-		
 	}
 
-	public static void getchars(String filename1) {
+	public static void getchars(String filename1) {		
 		File file = new File(filename1);
 		if(!file.exists()) {
 			System.out.println("未找到目标文件。");//指定路径下的文件不存在则输出：未找到目标文件
 		}else {		
-			
 		try {
 			FileInputStream fis=(new FileInputStream(file));
 			int temp=0;
@@ -48,43 +44,44 @@ public class wc {
 			fis.close();//关闭输入流
 		}catch (IOException ex) {
 			ex.printStackTrace();//捕获异常
-		}}
+		}
+		}
 	}
 		
 	public static void getwords(String filename1) {
-			File file = new File(filename1);
-			if(!file.exists()) {
-				System.out.println("未找到目标文件。");//指定路径下的文件不存在则输出：未找到目标文件
-			}else {
-			
-			try {
-				FileInputStream fis=(new FileInputStream(file));
-				int temp=0;
-				int tempchar=0;
-				while ((tempchar = fis.read()) !=-1) {
-					if(((char)tempchar) == 32 || ((char)tempchar) == '\n'){
-					temp=temp+1;//每读取到一个空格或换行符temp+1
-					}
-					}
-				if(temp==0) {
-				System.out.println("该文件的单词数:"+temp);//文件为空输出0
+		File file = new File(filename1);
+		if(!file.exists()) {
+			System.out.println("未找到目标文件。");//指定路径下的文件不存在则输出：未找到目标文件
+		}else {
+		try {
+			FileInputStream fis=(new FileInputStream(file));
+			int temp=0;
+			int tempchar=0;
+			while ((tempchar = fis.read()) !=-1) {
+				if(((char)tempchar) == 32 || ((char)tempchar) == '\n'){
+				temp=temp+1;//每读取到一个空格或换行符temp+1
 				}
-				else {
-					System.out.println("该文件的单词数:"+(temp+1));//文件不为空输出temp+1
 				}
-				fis.close();//关闭输入流
-			
-			}catch (IOException ex) {
-				ex.printStackTrace();
-	   }
+			if(temp==0) {
+			System.out.println("该文件的单词数:"+temp);//文件为空输出0
 			}
-}
+			else {
+				System.out.println("该文件的单词数:"+(temp+1));//文件不为空输出temp+1
+			}
+			fis.close();//关闭输入流
+			
+		}catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		}
+	  }
+		
+
 	public static void getlines(String filename1) {
 		File file = new File(filename1);
 		if(!file.exists()) {
 			System.out.println("未找到目标文件。");//指定路径下的文件不存在则输出：未找到目标文件
 		}else {
-		
 		try {
 			FileInputStream fis=(new FileInputStream(file));
 			int temp=0;
@@ -103,10 +100,10 @@ public class wc {
 		
 		}catch (IOException ex) {
 			ex.printStackTrace();
-   }
 		}
+		}
+      }
 }
-	}
 	
 		
 	
