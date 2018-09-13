@@ -1,7 +1,9 @@
 package getdata;
 import java.util.*;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class wc {
@@ -11,6 +13,8 @@ public class wc {
 		System.out.println("读取指令:-c  返回文件的字符数");
 		System.out.println("读取指令:-w  返回文件的单词数");
 		System.out.println("读取指令:-l  返回文件的行数");
+		System.out.println("读取指令:-s  返回文件空行数，注释行数以及代码行数");
+		System.out.println("读取指令:-all  返回上述所有数据");
 		System.out.println("请输入读取指令，回车后输入文件名：");
 		Scanner or =new Scanner(System.in);
 		String order=or.nextLine();//从键盘中输入读取指令
@@ -23,6 +27,15 @@ public class wc {
 		}//输入指令-w输出文件单词数
 		else if(order.trim().equals("-l")) {
 			getlines(filename);
+		}//输入指令-l输出文件行数
+		else if(order.trim().equals("-s")) {
+			getkonglines(filename);
+		}//输入指令-l输出文件行数
+		else if(order.trim().equals("-all")) {
+			getchars(filename);
+			getwords(filename);
+			getlines(filename);
+			getkonglines(filename);
 		}//输入指令-l输出文件行数
 		else {
 			System.out.println("指令输入错误。");
@@ -103,6 +116,35 @@ public class wc {
 		}
 		}
       }
+	public static void getkonglines(String filename1) {
+		int dl = 0, kl = 0, zl = 0;
+		String t;
+		File file = new File(filename1);
+		if(!file.exists()) {
+			System.out.println("未找到目标文件。");//指定路径下的文件不存在则输出：未找到目标文件
+		}else {
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				while ((t = br.readLine())!= null) {
+					if(t.trim().startsWith("//") == true || t.trim().startsWith("/*")==true ||t.trim().startsWith("}/*")==true || t.trim().startsWith("}//")==true){
+						zl=zl+1;
+					}
+					else if(t.trim().length()==0 || (t.trim().startsWith("}") == true && t.trim().length()==1)) {
+						kl=kl+1;
+					}
+					else {
+						dl=dl+1;
+					}
+				}br.close();
+
+			System.out.println("该文件的空行数:"+kl);
+			System.out.println("该文件注释行数"+zl);
+			System.out.println("该文件代码行数"+dl);
+		}catch (IOException ex) {
+			ex.printStackTrace();
+			}
+       }
+	}
 }
 	
 		
