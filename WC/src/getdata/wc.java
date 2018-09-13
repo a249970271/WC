@@ -13,9 +13,10 @@ public class wc {
 		System.out.println("读取指令:-c  返回文件的字符数");
 		System.out.println("读取指令:-w  返回文件的单词数");
 		System.out.println("读取指令:-l  返回文件的行数");
-		System.out.println("读取指令:-s  返回文件空行数，注释行数以及代码行数");
+		System.out.println("读取指令:-a  返回文件空行数，注释行数以及代码行数");
 		System.out.println("读取指令:-all  返回上述所有数据");
-		System.out.println("请输入读取指令，回车后输入文件名：");
+		System.out.println("特殊指令:-s  后接文件夹路径，返回文件夹中所有符合条件的文件的上述所有数据");
+		System.out.println("请输入读取指令，回车后输入文件名或路径：");
 		Scanner or =new Scanner(System.in);
 		String order=or.nextLine();//从键盘中输入读取指令
 		String filename=or.nextLine();//从键盘中输入文件名
@@ -28,7 +29,7 @@ public class wc {
 		else if(order.trim().equals("-l")) {
 			getlines(filename);
 		}//输入指令-l输出文件行数
-		else if(order.trim().equals("-s")) {
+		else if(order.trim().equals("-a")) {
 			getkonglines(filename);
 		}//输入指令-l输出文件行数
 		else if(order.trim().equals("-all")) {
@@ -37,6 +38,9 @@ public class wc {
 			getlines(filename);
 			getkonglines(filename);
 		}//输入指令-l输出文件行数
+		else if(order.trim().equals("-s")) {
+			file(filename);
+		}
 		else {
 			System.out.println("指令输入错误。");
 		}
@@ -96,26 +100,20 @@ public class wc {
 			System.out.println("未找到目标文件。");//指定路径下的文件不存在则输出：未找到目标文件
 		}else {
 		try {
-			FileInputStream fis=(new FileInputStream(file));
+			BufferedReader br = new BufferedReader(new FileReader(file));
 			int temp=0;
-			int tempchar=0;
-			while ((tempchar = fis.read()) !=-1) {
-				if(((char)tempchar) == '\n'){
-				temp=temp+1;//每读取到一个换行符temp+1
-				}}
-			if(temp==0) {
-				System.out.println("该文件的行数:"+temp);//文件为空输出0
-				}
-				else {
-					System.out.println("该文件的行数:"+(temp+1));//文件不为空输出temp+1
-				}
-			fis.close();//关闭输入流
+			while ((br.readLine())!= null) {
+				temp=temp+1;
+			}
+			System.out.println("该文件的行数:"+temp);//文件不为空输出temp+1
+			br.close();//关闭输入流
 		
 		}catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		}
       }
+	
 	public static void getkonglines(String filename1) {
 		int dl = 0, kl = 0, zl = 0;
 		String t;
@@ -124,26 +122,40 @@ public class wc {
 			System.out.println("未找到目标文件。");//指定路径下的文件不存在则输出：未找到目标文件
 		}else {
 			try {
-				BufferedReader br = new BufferedReader(new FileReader(file));
+				BufferedReader br = new BufferedReader(new FileReader(file));//用bufferedreader可以一次读一行
 				while ((t = br.readLine())!= null) {
 					if(t.trim().startsWith("//") == true || t.trim().startsWith("/*")==true ||t.trim().startsWith("}/*")==true || t.trim().startsWith("}//")==true){
 						zl=zl+1;
-					}
+					}// 计算注释行数，去掉string首尾空格数
 					else if(t.trim().length()==0 || (t.trim().startsWith("}") == true && t.trim().length()==1)) {
 						kl=kl+1;
-					}
+					}// 计算注空行数，去掉string首尾空格数
 					else {
 						dl=dl+1;
-					}
+					}// 剩下的便是代码行
 				}br.close();
 
-			System.out.println("该文件的空行数:"+kl);
+			System.out.println("该文件的空行数:"+kl);//输出
 			System.out.println("该文件注释行数"+zl);
 			System.out.println("该文件代码行数"+dl);
 		}catch (IOException ex) {
 			ex.printStackTrace();
 			}
        }
+	}
+	
+	public static void file(String filess) {
+		File file = new File (filess);
+		String[] files = file.list();//列出File对象的所有子文件名和路径名，返回String数组
+		for(String f : files) {
+			System.out.println("文件"+f+"的数据信息如下：");
+			getchars(filess+"/"+f);
+			getwords(filess+"/"+f);
+			getlines(filess+"/"+f);
+			getkonglines(filess+"/"+f);
+		}
+		
+		
 	}
 }
 	
